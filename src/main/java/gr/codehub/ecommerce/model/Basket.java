@@ -8,6 +8,8 @@ public class Basket {
     private int id;
     private Customer customer;
     private List<Product> products = new ArrayList<>();
+    private List<Double> discountRates = new ArrayList<>();
+    private boolean discountApplied;
 
     public int getId() {
         return id;
@@ -25,12 +27,26 @@ public class Basket {
         this.customer = customer;
     }
 
-    public void addProduct(Product product){
+    public void addProduct(Product product) throws Exception{
+        if(product == null)
+            throw new Exception("no product");
+        if(product.getName() == null)
+            throw new Exception("no product name");
+        if( product.getName().equals("Chicklets"))
+            throw new Exception("no Chicklets are permitted");
         products.add(product);
     }
 
+    public void addDiscount(double rate){
+        if (rate>=0 && rate<1. && discountRates.stream().reduce(0., (a,b)->a+b)<1)
+                discountRates.add(rate);
+    }
+
+
+
     public void removeProduct(int index){
-        products.remove(index);
+        if (index>=0 && index < products.size())
+            products.remove(index);
     }
 
     public void getProducts(){
@@ -65,7 +81,20 @@ public class Basket {
 
   //      for(Product product:products)
    //         product.setPrice( product.getPrice()*(1-rate));
-
-        products.forEach( product -> product.setPrice( product.getPrice()*(1-rate))) ;
+        if (!discountApplied) {
+            products.forEach(product -> product.setPrice(product.getPrice() * (1 - rate)));
+            discountApplied = true;
+        }
     }
+
+    public void applyDiscount() {
+        if (!discountApplied) {
+            final double rate =
+                    discountRates.stream().reduce(0.0,(a,b) -> a+b)>1?
+                            1.0: discountRates.stream().reduce(0.0,(a,b) -> a+b);
+             products.forEach(product -> product.setPrice(product.getPrice() * (1 - rate)));
+            discountApplied = true;
+        }
+    }
+
 }

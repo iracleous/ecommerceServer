@@ -11,7 +11,7 @@ public class MainApplication {
     private static final String NAME = "chips";
     private static final double PRICE = 5;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Customer customer = new Customer(1,
                 "Thomas", "Diam", "Ath",
                 new Date(100, 9, 1), 0);
@@ -37,10 +37,13 @@ public class MainApplication {
 
     private static void extracted() {
         boolean isActive = true;
+        Boolean isA = isActive;
         byte myByte = 13;
         char a = 'A';
+        Character a1 = a;
         short t = 12000;
         int x = 1;
+        Integer i = x;
         long myLong = 32L;
         float f = 5.4e2F;
         double d = 4.6e-5;
